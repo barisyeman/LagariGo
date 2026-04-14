@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./lagari.png" alt="LagariGo" width="220"/>
+  <img src="./lagari.png" alt="LagariGo" width="420"/>
 </p>
 
 <h1 align="center">LagariGo</h1>
