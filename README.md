@@ -1,6 +1,12 @@
-# LagariGo
+<p align="center">
+  <img src="./lagari.png" alt="LagariGo" width="220"/>
+</p>
 
-> Speed, simplicity, trust. A modern Go starter kit.
+<h1 align="center">LagariGo</h1>
+
+<p align="center"><em>Speed, simplicity, trust. A modern Go starter kit.</em></p>
+
+---
 
 A type-safe, server-rendered web starter built on Go. Clone it, swap the theme, ship it.
 
