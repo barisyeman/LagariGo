@@ -1,100 +1,100 @@
 # LagariGo
 
-> Hız, sadelik, güven. Laravel ergonomisi + Go performansı.
+> Speed, simplicity, trust. A modern Go starter kit.
 
-PHP/Laravel kolaylığını Go'nun tip güvenliği ve hızıyla birleştiren bir başlangıç şablonu. Klonla, kendi temanı giy, devam et.
+A type-safe, server-rendered web starter built on Go. Clone it, swap the theme, ship it.
 
 ## Stack
 
-- **Fiber** — HTTP framework
-- **Templ** — tip güvenli HTML şablonları (derleme zamanı kontrolü)
-- **HTMX** — sunucu taraflı reaktivite, JS framework yok
-- **GORM** — SQLite veya MySQL
-- **Düz CSS** — kendi temanı getir, Tailwind yok
+- **Fiber** &mdash; HTTP framework
+- **Templ** &mdash; type-safe HTML templates (compile-time checked)
+- **HTMX** &mdash; server-driven reactivity, no SPA bundle
+- **GORM** &mdash; SQLite or MySQL
+- **Plain CSS** &mdash; bring your own theme, no Tailwind
 
-## Kurulum
+## Quick start
 
 ```bash
-# 1. Templ CLI (bir kere)
+# 1. Templ CLI (one time)
 make install-tools
 
-# 2. Bağımlılıklar
+# 2. Dependencies
 go mod tidy
 
-# 3. Konfigürasyon
+# 3. Configuration
 cp .env.example .env
 
-# 4. Çalıştır
+# 4. Run
 make dev
 ```
 
-`http://localhost:3000` adresinde açılır.
+App runs at `http://localhost:3000`.
 
-İlk açılışta otomatik olarak:
-- SQLite veritabanı oluşturulur (`./lagarigo.db`)
-- Admin kullanıcı: `.env` içindeki `ADMIN_EMAIL` / `ADMIN_PASSWORD` (varsayılan `admin@lagarigo.local` / `admin123`)
-- Örnek menü linkleri ve bir hoş geldin sayfası
+On first boot the app will:
+- Create the database (SQLite file or MySQL schema)
+- Seed an admin user using `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `.env`
+- Add a sample page (`/welcome`) and default header/footer menu links
 
-## Klasör Yapısı
+## Project layout
 
 ```
-cmd/server/         # main.go (giriş noktası)
+cmd/server/         # main.go (entry point)
 internal/
-  auth/             # session yönetimi
+  auth/             # session helpers
   config/           # .env loader
-  database/         # GORM modelleri + bağlantı + seed
-  handler/          # HTTP handler'lar (controller)
-  middleware/       # auth/admin guard
-public/assets/      # statik (CSS/JS/img) — kendi temanı buraya
+  database/         # GORM models, connection, seeder
+  handler/          # HTTP handlers
+  middleware/       # auth & admin guards
+public/assets/      # static files (CSS / JS / images)
 views/
-  layouts/          # base.templ
+  layouts/          # base layout
   components/       # header, footer
   pages/            # home, about, contact, login, register, dynamic, 404
-  pages/admin/      # admin paneli sayfaları
+  pages/admin/      # admin panel views
 .env.example
 Makefile            # make dev | build | gen
 ```
 
-## Sayfalar
+## Routes
 
-- `/` — Ana sayfa
-- `/about-us` — Hakkımızda
-- `/contact` — İletişim
+- `/` &mdash; Home
+- `/about-us` &mdash; About
+- `/contact` &mdash; Contact
 - `/login`, `/register`, `/logout`
-- `/admin` — Yönetim paneli (sadece admin)
-- `/:slug` — Dinamik sayfalar (admin panelden sınırsız oluşturulabilir)
+- `/admin` &mdash; Dashboard (admin only)
+- `/:slug` &mdash; Dynamic pages (unlimited, managed from the admin panel)
 
-> Reserved slug'lar (`about-us`, `contact`, `login`, `register`, `admin`, `assets`) dinamik sayfa olarak kullanılamaz.
+> Reserved slugs (`about-us`, `contact`, `login`, `register`, `admin`, `assets`) cannot be used for dynamic pages.
 
-## Veritabanı
+## Database
 
-`.env` içinde `DB_DRIVER=sqlite` (varsayılan) veya `DB_DRIVER=mysql` ile değiştir. MySQL için `DB_HOST`, `DB_USER`, vb. doldur.
+Set `DB_DRIVER=sqlite` (default) or `DB_DRIVER=mysql` in `.env`. For MySQL, fill in `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`.
 
-## Güvenlik
+## Security
 
-- **XSS**: Templ tüm değişkenleri otomatik escape eder. `templ.SafeURL` sadece güvenli URL'ler için kullanılır.
-- **CSRF**: Tüm POST formlarında `_csrf` token bulunur, Fiber CSRF middleware ile doğrulanır.
-- **Şifre**: bcrypt ile hash'lenir.
-- **Session**: HttpOnly + SameSite=Lax cookie.
+- **XSS** &mdash; Templ auto-escapes all interpolated values. `templ.SafeURL` is used only for trusted URLs.
+- **CSRF** &mdash; All state-changing forms include a `_csrf` token, validated by Fiber's CSRF middleware.
+- **Passwords** &mdash; Hashed with bcrypt.
+- **Sessions** &mdash; HttpOnly, SameSite=Lax cookies.
 
-## Tema Değiştirme
+## Theming
 
-`public/assets/css/style.css` dosyasını sil veya değiştir. CSS sınıfları semantiktir (`.btn`, `.card`, `.flash`, vb.) — kendi tasarım sistemine kolayca adapte edilir.
+Replace `public/assets/css/style.css` with your own. Class names are semantic (`.btn`, `.card`, `.flash`, etc.) and easy to map to any design system. The default theme uses the Go cyan palette with light/dark variants.
 
-## Komutlar
+## Commands
 
 ```bash
-make dev        # Templ generate + go run
-make build      # Templ generate + go build → bin/lagarigo
-make gen        # Sadece templ generate
+make dev        # templ generate + go run
+make build      # templ generate + go build -> bin/lagarigo
+make gen        # only templ generate
 make tidy       # go mod tidy
-make clean      # bin/ + *.db + _templ.go dosyalarını sil
+make clean      # remove bin/, *.db, *_templ.go
 ```
 
-## Geliştirme
+## Development
 
-Templ dosyalarını (`.templ`) düzenledikten sonra `make gen` veya `make dev` ile yeniden üretmen gerekir. Veya `templ generate --watch` ile otomatik üretim yapabilirsin.
+After editing any `.templ` file, regenerate with `make gen` (or run `templ generate --watch` for live regeneration during development).
 
-## Lisans
+## License
 
 MIT
