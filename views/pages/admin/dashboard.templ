@@ -1,0 +1,28 @@
+package admin
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+
+templ Dashboard(data layouts.PageData, stats map[string]int64) {
+	@layouts.Base(data) {
+		<section class="admin">
+			<h1>Dashboard</h1>
+			<div class="cards">
+				<div class="card">
+					<h3>Pages</h3>
+					<p class="big">{ formatInt(stats["pages"]) }</p>
+					<a href="/admin/pages">Manage &rarr;</a>
+				</div>
+				<div class="card">
+					<h3>Menu links</h3>
+					<p class="big">{ formatInt(stats["menus"]) }</p>
+					<a href="/admin/menus">Manage &rarr;</a>
+				</div>
+				<div class="card">
+					<h3>Users</h3>
+					<p class="big">{ formatInt(stats["users"]) }</p>
+					<a href="/admin/users">Manage &rarr;</a>
+				</div>
+			</div>
+		</section>
+	}
+}

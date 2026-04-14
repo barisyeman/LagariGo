@@ -1,0 +1,49 @@
+package admin
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+import "github.com/barisyeman/LagariGo/internal/database"
+
+templ MenusList(data layouts.PageData, menus []database.Menu) {
+	@layouts.Base(data) {
+		<section class="admin">
+			<h1>Menu links</h1>
+
+			<h2>Add new link</h2>
+			<form method="POST" action="/admin/menus" class="form-stack">
+				<input type="hidden" name="_csrf" value={ data.CSRFToken }/>
+				<label>Label <input type="text" name="label" required/></label>
+				<label>URL <input type="text" name="url" required placeholder="/about-us"/></label>
+				<label>
+					Location
+					<select name="location">
+						<option value="header">Header</option>
+						<option value="footer">Footer</option>
+					</select>
+				</label>
+				<label>Position <input type="number" name="position" value="0"/></label>
+				<button type="submit" class="btn">Add link</button>
+			</form>
+
+			<h2>Existing links</h2>
+			<table class="table">
+				<thead><tr><th>Label</th><th>URL</th><th>Location</th><th>Position</th><th></th></tr></thead>
+				<tbody>
+					for _, m := range menus {
+						<tr>
+							<td>{ m.Label }</td>
+							<td>{ m.URL }</td>
+							<td>{ m.Location }</td>
+							<td>{ formatInt(int64(m.Position)) }</td>
+							<td>
+								<form method="POST" action={ templ.SafeURL("/admin/menus/" + formatUint(m.ID) + "/delete") } class="inline-form" onsubmit="return confirm('Delete this link?')">
+									<input type="hidden" name="_csrf" value={ data.CSRFToken }/>
+									<button type="submit" class="link-btn danger">Delete</button>
+								</form>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</section>
+	}
+}

@@ -1,0 +1,16 @@
+package pages
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+
+templ About(data layouts.PageData) {
+	@layouts.Base(data) {
+		<article class="page">
+			<h1>About</h1>
+			<p>LagariGo is a minimal, opinionated starter kit for building web applications in Go. It pairs the speed and type safety of the Go runtime with the productivity of server-rendered HTML.</p>
+			<h2>Philosophy</h2>
+			<p>Stay close to the platform. Render HTML on the server. Use HTMX where you need interactivity. Keep the deployable a single binary. Avoid heavy abstractions you would have to fight later.</p>
+			<h2>What's inside</h2>
+			<p>Fiber for routing, Templ for views, GORM for persistence, and a small amount of glue to wire up sessions, CSRF, and an admin panel. Customize the CSS file to match your brand &mdash; no framework lock-in.</p>
+		</article>
+	}
+}

@@ -1,0 +1,26 @@
+package admin
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+import "github.com/barisyeman/LagariGo/internal/database"
+
+templ UsersList(data layouts.PageData, users []database.User) {
+	@layouts.Base(data) {
+		<section class="admin">
+			<h1>Users</h1>
+			<table class="table">
+				<thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+				<tbody>
+					for _, u := range users {
+						<tr>
+							<td>{ formatUint(u.ID) }</td>
+							<td>{ u.Name }</td>
+							<td>{ u.Email }</td>
+							<td><span class="badge">{ u.Role }</span></td>
+							<td>{ u.CreatedAt.Format("2006-01-02") }</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</section>
+	}
+}

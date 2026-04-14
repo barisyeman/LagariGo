@@ -1,0 +1,55 @@
+package layouts
+
+import "github.com/barisyeman/LagariGo/views/components"
+import "github.com/barisyeman/LagariGo/internal/database"
+
+type PageData struct {
+	Title        string
+	User         *database.User
+	HeaderMenus  []database.Menu
+	FooterMenus  []database.Menu
+	CSRFToken    string
+	FlashSuccess string
+	FlashError   string
+}
+
+templ Base(data PageData) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ data.Title } &middot; LagariGo</title>
+			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+			<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+			<link rel="stylesheet" href="/assets/css/style.css"/>
+			<script>
+				(function() {
+					var t = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+					document.documentElement.setAttribute('data-theme', t);
+				})();
+				function toggleTheme() {
+					var current = document.documentElement.getAttribute('data-theme');
+					var next = current === 'dark' ? 'light' : 'dark';
+					document.documentElement.setAttribute('data-theme', next);
+					localStorage.setItem('theme', next);
+				}
+			</script>
+			<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+		</head>
+		<body hx-boost="true">
+			@components.Header(data.HeaderMenus, data.User)
+			<main class="container">
+				if data.FlashSuccess != "" {
+					<div class="flash flash-success">{ data.FlashSuccess }</div>
+				}
+				if data.FlashError != "" {
+					<div class="flash flash-error">{ data.FlashError }</div>
+				}
+				{ children... }
+			</main>
+			@components.Footer(data.FooterMenus)
+		</body>
+	</html>
+}

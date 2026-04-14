@@ -1,0 +1,13 @@
+package pages
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+
+templ NotFound(data layouts.PageData) {
+	@layouts.Base(data) {
+		<section class="page center">
+			<h1>404</h1>
+			<p class="muted">The page you are looking for could not be found.</p>
+			<p><a href="/" class="btn">Back to home</a></p>
+		</section>
+	}
+}

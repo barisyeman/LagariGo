@@ -1,0 +1,18 @@
+package components
+
+import "github.com/barisyeman/LagariGo/internal/database"
+import "time"
+import "strconv"
+
+templ Footer(menus []database.Menu) {
+	<footer class="site-footer">
+		<div class="container footer-inner">
+			<nav class="footer-nav">
+				for _, m := range menus {
+					<a href={ templ.SafeURL(m.URL) }>{ m.Label }</a>
+				}
+			</nav>
+			<p class="copyright">&copy; { strconv.Itoa(time.Now().Year()) } LagariGo</p>
+		</div>
+	</footer>
+}

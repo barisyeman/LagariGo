@@ -1,0 +1,15 @@
+package pages
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+import "github.com/barisyeman/LagariGo/internal/database"
+
+templ Dynamic(data layouts.PageData, page database.Page) {
+	@layouts.Base(data) {
+		<article class="page">
+			<h1>{ page.Title }</h1>
+			<div class="content">
+				{ page.Content }
+			</div>
+		</article>
+	}
+}

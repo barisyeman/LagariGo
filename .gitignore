@@ -1,0 +1,15 @@
+.env
+*.db
+*.db-journal
+/tmp/
+/bin/
+*.exe
+
+# IDE / tools
+.claude/
+.idea/
+.vscode/
+*.log
+
+# Templ generated files (regenerate with `templ generate`)
+*_templ.go

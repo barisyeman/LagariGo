@@ -1,0 +1,24 @@
+package pages
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+
+templ Login(data layouts.PageData) {
+	@layouts.Base(data) {
+		<section class="auth-card">
+			<h1>Sign in</h1>
+			<form method="POST" action="/login">
+				<input type="hidden" name="_csrf" value={ data.CSRFToken }/>
+				<label>
+					Email
+					<input type="email" name="email" required autofocus/>
+				</label>
+				<label>
+					Password
+					<input type="password" name="password" required/>
+				</label>
+				<button type="submit" class="btn">Sign in</button>
+			</form>
+			<p class="muted" style="margin-top:1.5rem">Don't have an account? <a href="/register">Sign up</a></p>
+		</section>
+	}
+}

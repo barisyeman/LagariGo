@@ -1,0 +1,17 @@
+package pages
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+
+templ Contact(data layouts.PageData) {
+	@layouts.Base(data) {
+		<article class="page">
+			<h1>Contact</h1>
+			<p class="muted">Reach out through any of the channels below.</p>
+			<ul class="contact-info">
+				<li><strong>Email</strong> hello@lagarigo.dev</li>
+				<li><strong>Phone</strong> +1 (555) 000-0000</li>
+				<li><strong>Address</strong> Istanbul, Turkey</li>
+			</ul>
+		</article>
+	}
+}

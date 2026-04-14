@@ -1,0 +1,87 @@
+package admin
+
+import "github.com/barisyeman/LagariGo/views/layouts"
+import "github.com/barisyeman/LagariGo/internal/database"
+
+templ PagesList(data layouts.PageData, pages []database.Page) {
+	@layouts.Base(data) {
+		<section class="admin">
+			<div class="admin-head">
+				<h1>Pages</h1>
+				<a href="/admin/pages/new" class="btn">+ New page</a>
+			</div>
+			<table class="table">
+				<thead>
+					<tr><th>Title</th><th>Slug</th><th>Status</th><th>Actions</th></tr>
+				</thead>
+				<tbody>
+					for _, p := range pages {
+						<tr>
+							<td>{ p.Title }</td>
+							<td><a href={ templ.SafeURL("/" + p.Slug) }>/{ p.Slug }</a></td>
+							<td>
+								if p.Published {
+									<span class="badge ok">Published</span>
+								} else {
+									<span class="badge no">Draft</span>
+								}
+							</td>
+							<td>
+								<a href={ templ.SafeURL("/admin/pages/" + formatUint(p.ID) + "/edit") }>Edit</a>
+								<form method="POST" action={ templ.SafeURL("/admin/pages/" + formatUint(p.ID) + "/delete") } class="inline-form" onsubmit="return confirm('Delete this page?')">
+									<input type="hidden" name="_csrf" value={ data.CSRFToken }/>
+									<button type="submit" class="link-btn danger">Delete</button>
+								</form>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</section>
+	}
+}
+
+templ PageForm(data layouts.PageData, page database.Page, isNew bool) {
+	@layouts.Base(data) {
+		<section class="admin">
+			<h1>
+				if isNew {
+					New page
+				} else {
+					Edit page
+				}
+			</h1>
+			<form method="POST" action={ formAction(page, isNew) } class="form-stack">
+				<input type="hidden" name="_csrf" value={ data.CSRFToken }/>
+				<label>
+					Title
+					<input type="text" name="title" value={ page.Title } required/>
+				</label>
+				<label>
+					Slug (URL)
+					<input type="text" name="slug" value={ page.Slug } pattern="[a-z0-9\-]+" required/>
+					<small>Lowercase letters, digits and dashes only. Leave blank to auto-generate from title.</small>
+				</label>
+				<label>
+					Content
+					<textarea name="content" rows="12">{ page.Content }</textarea>
+				</label>
+				<label class="inline">
+					<input type="checkbox" name="published" value="1" checked?={ page.Published }/>
+					Published
+				</label>
+				<div class="actions">
+					<button type="submit" class="btn">Save</button>
+					<a href="/admin/pages" class="btn btn-secondary">Cancel</a>
+				</div>
+			</form>
+		</section>
+	}
+}
+
+func formAction(p database.Page, isNew bool) templ.SafeURL {
+	if isNew {
+		return templ.SafeURL("/admin/pages")
+	}
+	return templ.SafeURL("/admin/pages/" + formatUint(p.ID))
+}
