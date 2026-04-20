@@ -175,6 +175,23 @@ main { min-height: 70vh; padding: 4rem 0; }
   color: var(--text);
 }
 .hero h1 .accent { color: var(--accent); }
+.hero h1 .type-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 0.9em;
+  margin-left: 4px;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: type-blink 0.9s steps(1) infinite;
+}
+.hero h1.typed-done .type-cursor { animation: type-blink 1.2s steps(1) infinite; opacity: 0.6; }
+@keyframes type-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero h1 .type-cursor { display: none; }
+}
 .hero p {
   font-size: clamp(1.05rem, 2vw, 1.25rem);
   color: var(--text-muted);

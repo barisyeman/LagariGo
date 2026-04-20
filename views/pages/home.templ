@@ -5,7 +5,50 @@ import "github.com/barisyeman/LagariGo/views/layouts"
 templ Home(data layouts.PageData) {
 	@layouts.Base(data) {
 		<section class="hero">
-			<h1>Build fast with <span class="accent">LagariGo</span></h1>
+			<h1 id="hero-title" data-prefix="Build fast with " data-accent="LagariGo">
+				<span class="typed"></span><span class="type-cursor" aria-hidden="true"></span>
+			</h1>
+			<script>
+				(function() {
+					function runTyper() {
+						var el = document.getElementById('hero-title');
+						if (!el) return;
+						if (el.dataset.active === '1' || el.dataset.done === '1') return;
+						el.dataset.active = '1';
+						var typed = el.querySelector('.typed');
+						typed.innerHTML = '';
+						var prefix = el.dataset.prefix;
+						var accent = el.dataset.accent;
+						var i = 0;
+						var span = null;
+						function step() {
+							if (i < prefix.length) {
+								typed.appendChild(document.createTextNode(prefix[i++]));
+								setTimeout(step, 55);
+							} else if (i - prefix.length < accent.length) {
+								if (!span) {
+									span = document.createElement('span');
+									span.className = 'accent';
+									typed.appendChild(span);
+								}
+								span.appendChild(document.createTextNode(accent[i - prefix.length]));
+								i++;
+								setTimeout(step, 75);
+							} else {
+								el.dataset.done = '1';
+								delete el.dataset.active;
+								el.classList.add('typed-done');
+							}
+						}
+						step();
+					}
+					runTyper();
+					if (!window.__heroTyperBound) {
+						window.__heroTyperBound = true;
+						document.body.addEventListener('htmx:load', runTyper);
+					}
+				})();
+			</script>
 			<p>A modern Go starter kit. Type-safe templates, server-driven UI with HTMX, and a single binary deployment.</p>
 			<div class="cta">
 				<a href="/about-us" class="btn">Learn more</a>
