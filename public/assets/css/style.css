@@ -459,6 +459,23 @@ form small { color: var(--text-faint); font-size: 0.82rem; display: block; margi
 body.htmx-swapping main { opacity: 0; transition: opacity 0.15s var(--ease); }
 body.htmx-settling main { opacity: 1; transition: opacity 0.2s var(--ease); }
 
+/* ===== Top progress bar ===== */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: rgb(0, 145, 181);
+  box-shadow: 0 0 8px rgba(0, 145, 181, 0.6);
+  z-index: 9999;
+  opacity: 0;
+  transition: width 0.2s ease-out, opacity 0.3s ease-out;
+  pointer-events: none;
+}
+#progress-bar.active { opacity: 1; }
+#progress-bar.done { width: 100% !important; opacity: 0; transition: width 0.2s ease-out, opacity 0.4s ease-out 0.1s; }
+
 /* ===== Mobile ===== */
 @media (max-width: 720px) {
   .container { padding: 0 1.25rem; }

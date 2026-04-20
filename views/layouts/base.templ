@@ -39,6 +39,41 @@ templ Base(data PageData) {
 			<script src="https://unpkg.com/htmx.org@1.9.12"></script>
 		</head>
 		<body hx-boost="true">
+			<div id="progress-bar"></div>
+			<script>
+				(function() {
+					var bar = document.getElementById('progress-bar');
+					var timer = null;
+					var width = 0;
+					function start() {
+						if (timer) clearInterval(timer);
+						bar.classList.remove('done');
+						bar.classList.add('active');
+						width = 10;
+						bar.style.width = width + '%';
+						timer = setInterval(function() {
+							if (width < 90) {
+								width += (90 - width) * 0.08;
+								bar.style.width = width + '%';
+							}
+						}, 120);
+					}
+					function done() {
+						if (timer) { clearInterval(timer); timer = null; }
+						bar.classList.remove('active');
+						bar.classList.add('done');
+						setTimeout(function() {
+							bar.classList.remove('done');
+							bar.style.width = '0%';
+							width = 0;
+						}, 400);
+					}
+					document.body.addEventListener('htmx:beforeRequest', start);
+					document.body.addEventListener('htmx:afterRequest', done);
+					document.body.addEventListener('htmx:responseError', done);
+					document.body.addEventListener('htmx:sendError', done);
+				})();
+			</script>
 			@components.Header(data.HeaderMenus, data.User)
 			<main class="container">
 				if data.FlashSuccess != "" {
